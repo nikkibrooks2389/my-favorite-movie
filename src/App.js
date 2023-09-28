@@ -1,12 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
-
+import Layout from './components/Layout';
 // Components
-import { MovieList, MovieDetails } from './components/Movie';
-import { FavoritesList } from './components/Favorites';
-import RandomMovieSelector from './components/RandomMovieSelector';
+import MovieSearch from './components/Movie/MovieSearch';
+import MovieDetails from './components/Movie/MovieDetails';
+// import  FavoritesList } from './components/Favorites';
+// import RandomMovieSelector from './components/RandomMovieSelector';
 
 // Styled Components
 const AppContainer = styled.div`
@@ -27,37 +28,22 @@ function App() {
   const favorites = useSelector(state => state.favorites);
 
   return (
+
+
     <Router>
-      <AppContainer>
-        <AppHeader>
-          <h1>My Favorite Movie</h1>
-        </AppHeader>
+      {/* <ScrollToTop /> */}
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {/* <Route index element={<Home />} /> */}
+          <Route path="/" element={<MovieSearch />} />
+          <Route path="movieDetails" element={<MovieDetails />} />
 
-        <main>
-          <Switch>
-            <Route exact path="/">
-              <MovieList />
-            </Route>
+          {/* <Route path="Favorites" element={<Projects />} /> */}
 
-            <Route path="/movie/:movieId">
-              <MovieDetails />
-            </Route>
-
-            <Route path="/favorites">
-              <FavoritesList movies={favorites} />
-            </Route>
-
-            <Route path="/random">
-              <RandomMovieSelector />
-            </Route>
-
-            <Route>
-              <div>404: Page Not Found</div>
-            </Route>
-          </Switch>
-        </main>
-      </AppContainer>
+        </Route>
+      </Routes>
     </Router>
+
   );
 }
 
