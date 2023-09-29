@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import movieReducer from './slices/movieSlice';  // Importing our slice reducer
+import movieReducer from './slices/movieSlice'; // Adjust the path based on your folder structure
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
-        movie: movieReducer
+        movies: movieReducer,
     }
 });
+
+export default store;

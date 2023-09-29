@@ -1,50 +1,30 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import styled from 'styled-components';
-import Layout from './components/Layout';
-// Components
-import MovieSearch from './components/Movie/MovieSearch';
-import MovieDetails from './components/Movie/MovieDetails';
-// import  FavoritesList } from './components/Favorites';
-// import RandomMovieSelector from './components/RandomMovieSelector';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle from './styles/GlobalStyles';
+import theme from './styles/theme';
+import HomePage from "./pages/HomePage";
+import MovieDetailPage from "./pages/MovieDetailsPage";
+import ActorDetailPage from "./pages/ActorDetailsPage";
+import WatchListPage from "./pages/WatchListPage";
+import Layout from "./components/Layout";
 
-// Styled Components
-const AppContainer = styled.div`
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  min-height: 100vh;
-  padding: 20px;
-`;
 
-const AppHeader = styled.header`
-  background-color: #282c34;
-  padding: 20px 0;
-  text-align: center;
-  color: white;
-`;
-
-function App() {
-  const favorites = useSelector(state => state.favorites);
-
+const App = () => {
   return (
-
-
-    <Router>
-      {/* <ScrollToTop /> */}
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* <Route index element={<Home />} /> */}
-          <Route path="/" element={<MovieSearch />} />
-          <Route path="movieDetails" element={<MovieDetails />} />
-
-          {/* <Route path="Favorites" element={<Projects />} /> */}
-
-        </Route>
-      </Routes>
-    </Router>
-
+    <ThemeProvider theme={theme}>
+      <Router>
+        <GlobalStyle />
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="movie/:id" element={<MovieDetailPage />} />
+            <Route path="movie/:movieId/actor/:actorId" element={<ActorDetailPage />} />
+            <Route path="watchlist" element={<WatchListPage />} />
+          </Route>
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
-
 export default App;

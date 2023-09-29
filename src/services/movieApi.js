@@ -4,13 +4,27 @@ const API_KEY = "d9fbd89a6404c8651bda8422b72df43b"; // Replace with your TMDb AP
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 // Fetch movies based on search query, or fetch popular movies if no query is provided
-export async function fetchMovies(query) {
-    let url = `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
 
+export async function fetchMovies(query, genre, sortBy) {
+    console.log(genre)
+
+    // Base URL for discovery
+    let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&page=1`;
+
+    // If there's a search query, switch to the search endpoint
     if (query) {
         url = `${BASE_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(query)}&page=1`;
     }
 
+    // Append genre filter
+    if (genre && !query) {
+        url += `&with_genres=${genre}`;
+    }
+
+    // Append sorting option
+    if (sortBy && !query) {
+        url += `&sort_by=${sortBy}`;
+    }
     try {
         const response = await fetch(url);
 
@@ -19,11 +33,12 @@ export async function fetchMovies(query) {
         }
 
         const data = await response.json();
+        console.log("Fetched Movies:", data.results);
         const movies = data.results.map(movie => ({
             id: movie.id,
             title: movie.title,
             description: movie.overview,
-            posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            posterPath: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'your_default_image_url',
         }));
 
         return movies;
