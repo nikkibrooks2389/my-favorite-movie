@@ -9,17 +9,20 @@ import ActorDetailPage from "./pages/ActorDetailsPage";
 import WatchListPage from "./pages/WatchListPage";
 import Layout from "./components/Layout";
 
+import Breadcrumbs from "./components/common/Breadcrumbs";
+
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <GlobalStyle />
+
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="movie/:id" element={<MovieDetailPage />} />
-            <Route path="movie/:movieId/actor/:actorId" element={<ActorDetailPage />} />
+            <Route path="actor/:actorId" element={<ActorDetailPage />} />
             <Route path="watchlist" element={<WatchListPage />} />
           </Route>
         </Routes>

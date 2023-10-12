@@ -1,7 +1,9 @@
 // src/api/movies.js
+import { formatDate } from '../utils/dateUtils';
 
 const API_KEY = "d9fbd89a6404c8651bda8422b72df43b"; // Replace with your TMDb API key
 const BASE_URL = 'https://api.themoviedb.org/3';
+
 
 // Fetch movies based on search query, or fetch popular movies if no query is provided
 
@@ -38,6 +40,7 @@ export async function fetchMovies(query, genre, sortBy) {
             id: movie.id,
             title: movie.title,
             description: movie.overview,
+            releaseDate: formatDate(movie.release_date),
             posterPath: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'your_default_image_url',
         }));
 
@@ -58,14 +61,59 @@ export async function fetchMovieDetails(movieId) {
         }
 
         const movie = await response.json();
+        console.log(movie)
         return {
             id: movie.id,
             title: movie.title,
             description: movie.overview,
+            releaseDate: movie.release_date,
             posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
         };
     } catch (error) {
         console.error("Error fetching movie details:", error.message);
+        throw error;
+    }
+}
+
+// Fetch cast of a specific movie by its ID
+export async function fetchMovieCast(movieId) {
+    try {
+        const response = await fetch(`${BASE_URL}/movie/${movieId}/credits?api_key=${API_KEY}&language=en-US`);
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch movie cast');
+        }
+
+        const data = await response.json();
+        const cast = data.cast.map(actor => ({
+            id: actor.id,
+            name: actor.name,
+            character: actor.character,
+            profilePath: actor.profile_path ? `https://image.tmdb.org/t/p/w500${actor.profile_path}` : 'your_default_actor_image_url',
+        }));
+
+        return cast;
+    } catch (error) {
+        console.error("Error fetching movie cast:", error.message);
+        throw error;
+    }
+}
+
+export async function fetchActorDetails(actorId) {
+    try {
+        const response = await fetch(`${BASE_URL}/person/${actorId}?api_key=${API_KEY}&language=en-US`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch actor details');
+        }
+        const actor = await response.json();
+        return {
+            id: actor.id,
+            name: actor.name,
+            bio: actor.biography,
+            profilePath: `https://image.tmdb.org/t/p/w500${actor.profile_path}`,
+        };
+    } catch (error) {
+        console.error("Error fetching actor details:", error.message);
         throw error;
     }
 }
