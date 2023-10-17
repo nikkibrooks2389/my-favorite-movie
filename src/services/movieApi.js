@@ -67,7 +67,9 @@ export async function fetchMovieDetails(movieId) {
             title: movie.title,
             description: movie.overview,
             releaseDate: movie.release_date,
+            tagline: movie.tagline,
             posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            backdropPath: movie.backdrop_path ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` : 'your_default_image_url',
         };
     } catch (error) {
         console.error("Error fetching movie details:", error.message);

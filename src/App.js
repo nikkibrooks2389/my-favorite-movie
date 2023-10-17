@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from './styles/GlobalStyles';
-import theme from './styles/theme';
+import { darkTheme } from './styles/theme';
 import HomePage from "./pages/HomePage";
 import MovieDetailPage from "./pages/MovieDetailsPage";
 import ActorDetailPage from "./pages/ActorDetailsPage";
@@ -14,10 +14,9 @@ import Breadcrumbs from "./components/common/Breadcrumbs";
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={darkTheme}>
       <Router>
         <GlobalStyle />
-
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />

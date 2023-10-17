@@ -11,12 +11,10 @@ const SearchWrapper = styled.div`
   align-items: center;
 `;
 
-function Search({ onSearch, onGenreChange, onSortChange }) {
+function Search({ onSearch }) {
   return (
     <SearchWrapper>
       <SearchBar onSearchChange={onSearch} />
-      {/* <GenreFilter onGenreChange={onGenreChange} />
-      <SortBy onSortChange={onSortChange} /> */}
     </SearchWrapper>
   );
 }

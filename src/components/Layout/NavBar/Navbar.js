@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
-
+import { darkTheme } from '../../../styles/theme';
 
 const NavbarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: white;
+
 `;
 
 const Hamburger = styled.div`
@@ -22,7 +22,7 @@ const Hamburger = styled.div`
   div {
     width: 30px;
     height: 4px;
-    background-color: black;
+    background-color: ${props => props.theme.colors.text};
   }
 
   @media (min-width: 768px) {
@@ -42,7 +42,7 @@ const NavItems = styled.div`
 const StyledLink = styled(NavLink)`
   margin: 0 1rem;
   text-decoration: none;
-  color: black;
+  color: ${props => props.theme.colors.text}; 
 
   &.active {
     font-weight: bold;
@@ -51,22 +51,22 @@ const StyledLink = styled(NavLink)`
 `;
 
 function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-    return (
-        <NavbarContainer>
-            {/* <h1 style={{ color: 'white' }}>Logo</h1> */}
-            <Hamburger onClick={() => setIsOpen(!isOpen)}>
-                <div />
-                <div />
-                <div />
-            </Hamburger>
-            <NavItems open={isOpen}>
-                <StyledLink to="/" activeClassName="active">Search</StyledLink>
-                <StyledLink to="/watchlist" activeClassName="active">Watchlist</StyledLink>
-            </NavItems>
-        </NavbarContainer>
-    );
+  return (
+    <NavbarContainer>
+      {/* <h1 style={{ color: 'white' }}>Logo</h1> */}
+      <Hamburger onClick={() => setIsOpen(!isOpen)}>
+        <div />
+        <div />
+        <div />
+      </Hamburger>
+      <NavItems open={isOpen}>
+        <StyledLink to="/" activeClassName="active">Search</StyledLink>
+        <StyledLink to="/watchlist" activeClassName="active">Watchlist</StyledLink>
+      </NavItems>
+    </NavbarContainer>
+  );
 }
 
 export default Navbar;

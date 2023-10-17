@@ -1,18 +1,14 @@
-const theme = {
-    // Basic colors
-    background: '#121212',  // Dark background
-    text: '#EAEAEA',        // Light text for better readability on dark background
-    primary: '#BB86FC',     // A vibrant purple as the pop of color, for primary actions & highlights
-    secondary: '#2C2C2C',   // A slightly lighter shade for secondary content, like cards or modals
-    border: '#3A3A3A',      // Border color for inputs, cards, etc.
+export const darkTheme = {
+    colors: {
+        background: '#121212',       // Dark background color
+        text: '#ffffff',            // White text color
+        primary: '#3498db',         // Blue primary color
+        secondary: '#5865f2',       // Lighter secondary color
+        secondaryLight: '#5865f2',  // Light secondary color
 
-    // Hover states - slightly brighter versions of primary and secondary colors
-    hoverPrimary: '#D198FF',
-    hoverSecondary: '#3D3D3D',
+    },
+    fonts: {
+        main: 'Arial, sans-serif',  // Main font
 
-    // Error & Success colors, if needed
-    error: '#CF6679',
-    success: '#03DAC6',
+    },
 };
-
-export default theme;
