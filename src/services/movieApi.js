@@ -1,5 +1,8 @@
 // src/api/movies.js
 import { formatDate } from '../utils/dateUtils';
+import movieplaceholder from '../assets/movie-placeholder.png';
+import personPlaceholder from '../assets/person-placeholder.png';
+
 
 const API_KEY = "d9fbd89a6404c8651bda8422b72df43b"; // Replace with your TMDb API key
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -41,7 +44,7 @@ export async function fetchMovies(query, genre, sortBy) {
             title: movie.title,
             description: movie.overview,
             releaseDate: formatDate(movie.release_date),
-            posterPath: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'your_default_image_url',
+            posterPath: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : movieplaceholder,
         }));
 
         return movies;
@@ -67,9 +70,10 @@ export async function fetchMovieDetails(movieId) {
             title: movie.title,
             description: movie.overview,
             releaseDate: movie.release_date,
+            genres: movie.genres,
             tagline: movie.tagline,
             posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-            backdropPath: movie.backdrop_path ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` : 'your_default_image_url',
+            backdropPath: movie.backdrop_path ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` : '',
         };
     } catch (error) {
         console.error("Error fetching movie details:", error.message);
@@ -87,14 +91,21 @@ export async function fetchMovieCast(movieId) {
         }
 
         const data = await response.json();
+        console.log("CAST", data)
         const cast = data.cast.map(actor => ({
             id: actor.id,
             name: actor.name,
             character: actor.character,
-            profilePath: actor.profile_path ? `https://image.tmdb.org/t/p/w500${actor.profile_path}` : 'your_default_actor_image_url',
+            profilePath: actor.profile_path ? `https://image.tmdb.org/t/p/w500${actor.profile_path}` : personPlaceholder,
+        }));
+        const crew = data.crew.map(crew => ({
+            id: crew.id,
+            name: crew.name,
+            job: crew.job,
+            profilePath: crew.profile_path ? `https://image.tmdb.org/t/p/w500${crew.profile_path}` : personPlaceholder,
         }));
 
-        return cast;
+        return { cast: cast, crew: crew };
     } catch (error) {
         console.error("Error fetching movie cast:", error.message);
         throw error;

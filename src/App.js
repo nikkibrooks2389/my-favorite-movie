@@ -8,7 +8,7 @@ import MovieDetailPage from "./pages/MovieDetailsPage";
 import ActorDetailPage from "./pages/ActorDetailsPage";
 import WatchListPage from "./pages/WatchListPage";
 import Layout from "./components/Layout";
-
+import CastAndCrew from "./pages/CastAndCrew";
 import Breadcrumbs from "./components/common/Breadcrumbs";
 
 
@@ -20,7 +20,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
-            <Route path="movie/:id" element={<MovieDetailPage />} />
+            <Route path="/movie/:movieId/cast-crew" element={<CastAndCrew />} />
+            <Route path="movie/:movieId" element={<MovieDetailPage />} />
             <Route path="actor/:actorId" element={<ActorDetailPage />} />
             <Route path="watchlist" element={<WatchListPage />} />
           </Route>

@@ -90,11 +90,8 @@ const CastHeader = styled.h2`
 `;
 
 const TopBilledCastList = styled.div`
-
     display: flex;
     flex-direction: row;
-    overflow: auto;
-    justify-content: center;
 `;
 
 const MovieDetailsContainerBottom = styled.div`
@@ -107,19 +104,22 @@ const MovieDetailsContainerBottom = styled.div`
 `;
 
 function MovieDetailPage() {
-    const { id } = useParams();
+    const { movieId } = useParams();
     const [movie, setMovie] = useState(null);
     const [cast, setCast] = useState([]);
+    const [crew, setCrew] = useState([]);
     const [selectedActor, setSelectedActor] = useState(null);
 
     const dispatch = useDispatch();
     useEffect(() => {
         const fetchDetailsAndCast = async () => {
             try {
-                const details = await fetchMovieDetails(id);
-                const movieCast = await fetchMovieCast(id);
+                const details = await fetchMovieDetails(movieId);
+                const movieCastCrew = await fetchMovieCast(movieId);
                 setMovie(details);
-                setCast(movieCast);
+                setCast(movieCastCrew.cast);
+                setCrew(movieCastCrew.crew)
+
                 dispatch(
                     setBreadcrumbs([
                         { label: 'Search', path: '/' },
@@ -132,7 +132,7 @@ function MovieDetailPage() {
         };
 
         fetchDetailsAndCast();
-    }, [id]);
+    }, [movieId]);
 
     if (!movie) return <p>Loading...</p>;
 
@@ -165,6 +165,7 @@ function MovieDetailPage() {
                         ))}
                     </TopBilledCastList>
                 </CastContainer>
+                <Link state={{ cast, crew }} to={`/movie/${movie.id}/cast-crew`}>View Full Cast and Crew</Link>
             </MovieDetailsContainerBottom>
         </DetailContainer>
     );

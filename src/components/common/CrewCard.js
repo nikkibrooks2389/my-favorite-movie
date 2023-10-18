@@ -15,42 +15,42 @@ const Card = styled.div`
   align-items: center;
 `;
 
-const ActorImage = styled.img`
+const CrewImage = styled.img`
   width: 100%;
   height: 70%; /* Adjust the height of the image within the card */
   object-fit: cover;
   border-radius: 5px 5px 0 0; /* Rounded corners only at the top */
 `;
 
-const ActorInfo = styled.div`
+const CrewInfo = styled.div`
   flex-grow: 1; /* Allow the info section to grow within the fixed height */
   display: flex;
   flex-direction: column;
   justify-content: center;
 `;
 
-const ActorName = styled.h3`
+const CrewName = styled.h3`
   font-size: 16px;
   margin: 5px 0;
   color: #fff;
 `;
 
-const CharacterName = styled.p`
+const CrewJob = styled.p`
   font-size: 14px;
   color: #bbb;
   margin: 5px 0;
 `;
 
-function ActorCard({ actor }) {
+function CrewCard({ crew }) {
     return (
         <Card>
-            <ActorImage src={actor.profilePath} alt={actor.name} />
-            <ActorInfo>
-                <ActorName>{actor.name}</ActorName>
-                <CharacterName>as {actor.character}</CharacterName>
-            </ActorInfo>
+            <CrewImage src={crew.profilePath} alt={crew.name} />
+            <CrewInfo>
+                <CrewName>{crew.name}</CrewName>
+                <CrewJob> {crew.job}</CrewJob>
+            </CrewInfo>
         </Card>
     );
 }
 
-export default ActorCard;
+export default CrewCard;
