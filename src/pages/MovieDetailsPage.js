@@ -5,9 +5,10 @@ import { fetchMovieDetails, fetchMovieCast } from '../services/movieApi';
 import { getYearFromDate, formatDate } from '../utils/dateUtils';
 import CustomCircularProgress from '../components/common/CustomCircularProgress';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import ActorCard from '../components/common/ActorCard';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToWatchlist, removeFromWatchlist, selectIsInWatchlist } from '../redux/slices/watchListSlice';
 
 const DetailContainer = styled.div`
   padding: 20px;
@@ -48,6 +49,7 @@ const MoviePosterImage = styled.img`
 
 const MovieInfoContainer = styled.div`
    margin: 0 2rem;
+   z-index: 2;
 `;
 
 const MovieTitle = styled.h2`
@@ -134,19 +136,55 @@ const MovieDetails = styled.div`
     align-items: center;
     `;
 
+
+const WatchlistButton = styled.button`
+    background-color: ${(props) => (props.isInWatchlist ? 'red' : 'green')}; // Customize the background color
+    color: white; // Text color
+    padding: 10px 20px; // Adjust the padding as needed
+    font-size: 16px; // Font size
+    border: none; // Remove the border
+    cursor: pointer; // Add a pointer cursor
+    transition: background-color 0.3s ease-in-out; // Add a smooth background color transition
+  
+    &:hover {
+      background-color: ${(props) => (props.isInWatchlist ? 'darkred' : 'darkgreen')}; // Customize the hover background color
+    }
+  `;
+
 const UserScoreWrapper = styled.div`
 display: flex;
 align-items: center;
     margin-bottom: 1.5rem;
     font-size: 1rem;
     font-weight: bold;
+  
     `
 
 function MovieDetailPage() {
+    const dispatch = useDispatch();
     const { movieId } = useParams();
     const [movie, setMovie] = useState(null);
     const [cast, setCast] = useState([]);
     const [crew, setCrew] = useState([]);
+
+    const isInWatchlist = useSelector((state) => selectIsInWatchlist(state, movieId));
+
+    console.log(isInWatchlist)
+
+    const handleToggleWatchlist = async () => {
+        if (isInWatchlist) {
+            console.log("Removing movie with ID:", movieId);
+            dispatch(removeFromWatchlist({ id: movieId }));
+        } else {
+            // Fetch the movie data and add it to the watchlist
+            try {
+                const details = await fetchMovieDetails(movieId);
+                dispatch(addToWatchlist(details));
+            } catch (error) {
+                console.error('Error fetching movie details:', error.message);
+            }
+        }
+    };
 
     const formatMovieDetails = () => {
         let releaseDate = formatDate(movie.releaseDate)
@@ -173,6 +211,9 @@ function MovieDetailPage() {
         fetchDetailsAndCast();
     }, [movieId]);
 
+
+
+
     if (!movie) return <p>Loading...</p>;
 
     return (
@@ -196,6 +237,10 @@ function MovieDetailPage() {
                             <span>Score</span>
                         </div>
                     </UserScoreWrapper>
+
+                    <WatchlistButton isInWatchlist={isInWatchlist} onClick={handleToggleWatchlist}>
+                        {isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
+                    </WatchlistButton>
                     <MovieDescription>  <h2>Overview</h2> {movie.description}</MovieDescription>
 
                 </MovieInfoContainer>

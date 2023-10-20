@@ -1,7 +1,7 @@
 // src/components/MovieList.js
 import React from 'react';
 import styled from 'styled-components';
-import MovieCard from "./MoveCard";
+import MovieCard from "./MovieCard";
 
 const ListWrapper = styled.div`
   display: flex;

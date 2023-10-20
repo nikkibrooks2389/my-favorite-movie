@@ -3,11 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MovieList from '../components/common/MovieList';
 import { fetchMovies } from '../services/movieApi';
 import styled from 'styled-components';
+import SearchBar from '../components/common/SearchBar';
 import NoResultsComponent from '../components/common/NoResults';
 const SearchResultsPageWrapper = styled.div`
   padding: 20px;
   text-align: center;
 `;
+
 
 const SearchResultsPage = () => {
     const { query } = useParams();
@@ -19,14 +21,20 @@ const SearchResultsPage = () => {
 
     useEffect(() => {
         const fetchAllMovies = async () => {
+
             setLoading(true);
             setError(null);
+
             try {
                 const results = await fetchMovies(query);
+
                 if (results.length === 0) {
                     setNoResultsFound(true);
+                } else {
+                    setNoResultsFound(false);
+                    setMovies(results);
                 }
-                setMovies(results);
+
             } catch (e) {
                 setError(e.message);
             } finally {
@@ -39,7 +47,7 @@ const SearchResultsPage = () => {
 
     return (
         <SearchResultsPageWrapper>
-
+            <SearchBar defaultQuery={query} />
             <h2>Search Results for: {query}</h2>
             {loading ? (
                 <p>Loading...</p>
