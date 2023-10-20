@@ -9,6 +9,7 @@ import ActorDetailPage from "./pages/ActorDetailsPage";
 import WatchListPage from "./pages/WatchListPage";
 import Layout from "./components/Layout";
 import CastAndCrew from "./pages/CastAndCrew";
+import SearchResultsPage from "./pages/SearchResultsPage";
 
 
 
@@ -20,6 +21,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
+            <Route path="search/:query" element={<SearchResultsPage />} />
             <Route path="/movie/:movieId/cast-crew" element={<CastAndCrew />} />
             <Route path="movie/:movieId" element={<MovieDetailPage />} />
             <Route path="actor/:actorId" element={<ActorDetailPage />} />

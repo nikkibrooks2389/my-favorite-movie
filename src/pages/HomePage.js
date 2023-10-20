@@ -1,16 +1,10 @@
-
-import React, { useState, useEffect } from 'react';
-
-import { useDispatch } from 'react-redux';
-
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MovieList from '../components/common/MovieList';
 import { fetchMovies } from "../services/movieApi";
-
 import styled from "styled-components";
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
-
 
 const HomeWrapper = styled.div`
   padding: 20px;
@@ -61,70 +55,34 @@ const StyledButton = styled(Button)`
     &:hover {
       background-color: #5865f2;
     }
-    
   }
 `;
 
-
-
 const HomePage = () => {
-  const [movies, setMovies] = useState([]);
   const [query, setQuery] = useState('');
-  const [genre, setGenre] = useState(null);
-  const [sortBy, setSortBy] = useState('popularity.desc');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const dispatch = useDispatch();
-
-  const fetchAllMovies = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const results = await fetchMovies(query, genre, sortBy);
-      console.log(results)
-      setMovies(results);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form behavior
-    fetchAllMovies();
+    e.preventDefault();
+    console.log('Query:', query);
+    navigate(`/search/${query}`);
   };
 
-
   return (
-    <div>
-
-      <HomeWrapper>
-        <h2>My Favorite Movies</h2>
-
-        <SearchForm onSubmit={handleSubmit}>
-          <StyledInput
-            type="text"
-            placeholder="Search for movies..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <StyledButton type="submit" variant="contained" color="primary">
-            <SearchIcon />
-          </StyledButton>
-        </SearchForm>
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>Error: {error}</p>
-        ) : (
-          <MovieList movies={movies} />
-        )}
-      </HomeWrapper>
-
-    </div>
+    <HomeWrapper>
+      <h2>My Favorite Movies</h2>
+      <SearchForm onSubmit={handleSubmit}>
+        <StyledInput
+          type="text"
+          placeholder="Search for movies..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <StyledButton type="submit" variant="contained" color="primary">
+          <SearchIcon />
+        </StyledButton>
+      </SearchForm>
+    </HomeWrapper>
   );
 }
 

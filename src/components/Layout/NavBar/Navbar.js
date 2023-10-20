@@ -62,7 +62,7 @@ function Navbar() {
         <div />
       </Hamburger>
       <NavItems open={isOpen}>
-        <StyledLink to="/" activeClassName="active">Search</StyledLink>
+        <StyledLink to="/" activeClassName="active">MYFM</StyledLink>
         <StyledLink to="/watchlist" activeClassName="active">Watchlist</StyledLink>
       </NavItems>
     </NavbarContainer>
