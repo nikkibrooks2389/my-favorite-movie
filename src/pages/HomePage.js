@@ -2,33 +2,20 @@
 import React, { useState, useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { resetBreadcrumbs } from '../redux/slices/breadcrumbsSlice';
 
-// import Search from '../components/common/Search';
+
 import MovieList from '../components/common/MovieList';
 import { fetchMovies } from "../services/movieApi";
 
 import styled from "styled-components";
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 
-// const StyledInput = styled(Input)`
-//   color: red;
-//   border: 1px solid green;
-
-//   &:hover {
-//     border-color: blue;
-//   }
-// `;
 
 const HomeWrapper = styled.div`
   padding: 20px;
   text-align: center;
 `;
-
-
-
 
 const SearchForm = styled.form`
   display: flex;
@@ -44,7 +31,7 @@ const StyledInput = styled.input`
   padding: 10px;
   width: 200px;
   transition: border-color 0.3s ease-in-out;
-font-size: 16px;
+  font-size: 16px;
   &:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
@@ -109,10 +96,6 @@ const HomePage = () => {
     fetchAllMovies();
   };
 
-
-  useEffect(() => {
-    dispatch(resetBreadcrumbs());
-  }, [dispatch]);
 
   return (
     <div>

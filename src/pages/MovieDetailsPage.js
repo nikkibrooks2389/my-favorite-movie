@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchMovieDetails, fetchMovieCast } from '../services/movieApi';
-import { getYearFromDate } from '../utils/dateUtils';
+import { getYearFromDate, formatDate } from '../utils/dateUtils';
+import CustomCircularProgress from '../components/common/CustomCircularProgress';
 import { Link } from 'react-router-dom';
-import { setBreadcrumbs } from '../redux/slices/breadcrumbsSlice';
 import { useDispatch } from 'react-redux';
 import ActorCard from '../components/common/ActorCard';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const DetailContainer = styled.div`
   padding: 20px;
@@ -50,18 +51,19 @@ const MovieInfoContainer = styled.div`
 `;
 
 const MovieTitle = styled.h2`
-  font-size: 3rem;
-  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  margin:1rem 0 1rem 0;
 `;
 
 const MovieDescription = styled.p`
-  font-size: 16px;
+  font-size: 1rem;
+  margin-top: 2rem;
 `;
 
 const CastContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin: 2rem 0;
   overflow: auto;
   /* Customize the scrollbar */
 
@@ -92,25 +94,68 @@ const CastHeader = styled.h2`
 const TopBilledCastList = styled.div`
     display: flex;
     flex-direction: row;
+    padding-bottom:1rem
 `;
 
 const MovieDetailsContainerBottom = styled.div`
     width: 100%;
     padding: 3rem;
-    // display: flex;
     flex-direction: column  ;
     align-items: center;
     height: 100%;
 `;
+
+const StyledLink = styled(Link)`
+text-decoration: none; 
+color:${(props) => props.theme.colors.text};
+font-weight: bold; 
+font-size: 1.5rem;
+margin-top: 10px; 
+text-align: center;
+
+
+/* Add custom margin to the right of the icon for spacing */
+.MuiSvgIcon-root {
+    margin-left: 5px; /* Adjust this value as needed */
+    vertical-align: middle;
+    font-size: 1.8rem;
+    padding-bottom: 2px;
+}
+`;
+
+const MovieDetails = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: ${(props) => props.theme.colors.text};
+    margin-bottom: 1rem;
+    align-items: center;
+    `;
+
+const UserScoreWrapper = styled.div`
+display: flex;
+align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    `
 
 function MovieDetailPage() {
     const { movieId } = useParams();
     const [movie, setMovie] = useState(null);
     const [cast, setCast] = useState([]);
     const [crew, setCrew] = useState([]);
-    const [selectedActor, setSelectedActor] = useState(null);
 
-    const dispatch = useDispatch();
+    const formatMovieDetails = () => {
+        let releaseDate = formatDate(movie.releaseDate)
+        let movieGenres = movie?.genres.map(movie => " " + movie.name)
+        let movieRuntime = movie?.runtime
+        return `${releaseDate} • ${movieGenres} • ${movieRuntime}`;
+    }
+
+
     useEffect(() => {
         const fetchDetailsAndCast = async () => {
             try {
@@ -120,12 +165,6 @@ function MovieDetailPage() {
                 setCast(movieCastCrew.cast);
                 setCrew(movieCastCrew.crew)
 
-                dispatch(
-                    setBreadcrumbs([
-                        { label: 'Search', path: '/' },
-                        { label: details.title, path: `movie/${details.id}` },
-                    ])
-                );
             } catch (error) {
                 console.error('Error fetching movie details and cast:', error.message);
             }
@@ -145,13 +184,25 @@ function MovieDetailPage() {
 
                 <MovieInfoContainer>
                     <MovieTitle>{`${movie.title} (${getYearFromDate(movie.releaseDate)})`}</MovieTitle>
-                    <h2>Overview</h2>
-                    <MovieDescription>{movie.description}</MovieDescription>
+                    <MovieDetails> {formatMovieDetails()}</MovieDetails >
+                    <UserScoreWrapper>
+                        <CustomCircularProgress percent={Math.round(movie.userScore)} size={60} />
+                        <div style={{ marginLeft: "1rem" }}>
+
+                            <span >
+                                User
+                            </span>
+                            <br />
+                            <span>Score</span>
+                        </div>
+                    </UserScoreWrapper>
+                    <MovieDescription>  <h2>Overview</h2> {movie.description}</MovieDescription>
+
                 </MovieInfoContainer>
             </MovieDetailsContainer>
             <MovieDetailsContainerBottom>
+                <CastHeader>Top Billed Cast</CastHeader>
                 <CastContainer>
-                    <CastHeader>Top Billed Cast</CastHeader>
                     <TopBilledCastList>
 
                         {cast.slice(0, 10).map((actor) => (
@@ -165,9 +216,10 @@ function MovieDetailPage() {
                         ))}
                     </TopBilledCastList>
                 </CastContainer>
-                <Link state={{ cast, crew }} to={`/movie/${movie.id}/cast-crew`}>View Full Cast and Crew</Link>
+
+                <StyledLink state={{ cast, crew }} to={`/movie/${movie.id}/cast-crew`}>View Full Cast and Crew  <ArrowForwardIcon /> </StyledLink>
             </MovieDetailsContainerBottom>
-        </DetailContainer>
+        </DetailContainer >
     );
 }
 

@@ -2,7 +2,7 @@
 import { formatDate } from '../utils/dateUtils';
 import movieplaceholder from '../assets/movie-placeholder.png';
 import personPlaceholder from '../assets/person-placeholder.png';
-
+import { convertMinutesToHoursAndMinutes } from '../utils/timeUtils';
 
 const API_KEY = "d9fbd89a6404c8651bda8422b72df43b"; // Replace with your TMDb API key
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -72,6 +72,8 @@ export async function fetchMovieDetails(movieId) {
             releaseDate: movie.release_date,
             genres: movie.genres,
             tagline: movie.tagline,
+            userScore: movie.vote_average * 10,
+            runtime: convertMinutesToHoursAndMinutes(movie.runtime),
             posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
             backdropPath: movie.backdrop_path ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` : '',
         };
@@ -127,6 +129,50 @@ export async function fetchActorDetails(actorId) {
         };
     } catch (error) {
         console.error("Error fetching actor details:", error.message);
+        throw error;
+    }
+}
+
+export async function fetchKnownMovies(actorName) {
+    try {
+        const response = await fetch(
+            `${BASE_URL}/search/person?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(
+                actorName
+            )}&page=1`
+        );
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch known movies');
+        }
+
+        const data = await response.json();
+        if (data.results && data.results.length > 0) {
+            const actorId = data.results[0].id;
+            const actorMoviesResponse = await fetch(
+                `${BASE_URL}/person/${actorId}/movie_credits?api_key=${API_KEY}&language=en-US`
+            );
+
+            if (!actorMoviesResponse.ok) {
+                throw new Error('Failed to fetch actor movies');
+            }
+
+            const actorMoviesData = await actorMoviesResponse.json();
+            console.log('Fetched Known Movies:', actorMoviesData.cast);
+
+            const knownMovies = actorMoviesData.cast.map((movie) => ({
+                id: movie.id,
+                title: movie.title,
+                posterPath: movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : movieplaceholder,
+            }));
+
+            return knownMovies;
+        }
+
+        return [];
+    } catch (error) {
+        console.error('Error fetching known movies:', error.message);
         throw error;
     }
 }

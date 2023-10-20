@@ -9,7 +9,7 @@ import ActorDetailPage from "./pages/ActorDetailsPage";
 import WatchListPage from "./pages/WatchListPage";
 import Layout from "./components/Layout";
 import CastAndCrew from "./pages/CastAndCrew";
-import Breadcrumbs from "./components/common/Breadcrumbs";
+
 
 
 const App = () => {
