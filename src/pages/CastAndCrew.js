@@ -22,11 +22,15 @@ const CastAndCrew = () => {
     const CastWrapper = styled.div`
         display: flex;
         flex-direction: column;
+        align-items: center;
+        text-align: center;
     `;
 
     const CrewWrapper = styled.div`
         display: flex;
         flex-direction: column;
+        align-items: center;
+        text-align: center;
     `;
 
     const ActorList = styled.div`
@@ -77,19 +81,35 @@ const CastAndCrew = () => {
             <CastAndCrewWrapper>
                 <CastWrapper>
                     <Heading>Cast</Heading>
-                    <ActorList>
-                        {cast.map((castMember) => (
-                            <ActorCard key={castMember.id} actor={castMember} />
-                        ))}
-                    </ActorList>
+                    {cast.length > 0 ?
+                        <ActorList>
+                            {cast.map((castMember) => (
+                                <Link
+                                    to={`/actor/${castMember.id}`}
+                                    key={castMember.id}
+                                    style={{ textDecoration: 'none', color: 'inherit' }}
+                                >
+                                    <ActorCard key={castMember.id} actor={castMember} />
+                                </Link>
+                            ))}
+                        </ActorList>
+                        : <p>No cast members found</p>}
                 </CastWrapper>
                 <CrewWrapper>
                     <Heading>Crew</Heading>
-                    <CrewList>
-                        {crewMembers.map((crewMember) => (
-                            <CrewCard key={crewMember.id} crew={crewMember} />
-                        ))}
-                    </CrewList>
+                    {crewMembers.length > 0 ?
+                        <CrewList>
+                            {crewMembers.map((crewMember) => (
+                                <Link
+                                    to={`/actor/${crewMember.id}`}
+                                    key={crewMember.id}
+                                    style={{ textDecoration: 'none', color: 'inherit' }}
+                                >
+                                    <CrewCard key={crewMember.id} crew={crewMember} />
+                                </Link>
+                            ))}
+                        </CrewList>
+                        : <p>No crew members found</p>}
                 </CrewWrapper>
             </CastAndCrewWrapper>
         </div>

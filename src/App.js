@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from './styles/GlobalStyles';
-import { darkTheme } from './styles/theme';
+import { theme } from './styles/theme';
 import HomePage from "./pages/HomePage";
 import MovieDetailPage from "./pages/MovieDetailsPage";
 import ActorDetailPage from "./pages/ActorDetailsPage";
@@ -15,7 +15,7 @@ import SearchResultsPage from "./pages/SearchResultsPage";
 
 const App = () => {
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <Router>
         <GlobalStyle />
         <Routes>

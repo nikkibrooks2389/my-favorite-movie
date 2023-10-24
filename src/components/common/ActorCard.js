@@ -42,15 +42,18 @@ const CharacterName = styled.p`
 `;
 
 function ActorCard({ actor }) {
-    return (
-        <Card>
-            <ActorImage src={actor.profilePath} alt={actor.name} />
-            <ActorInfo>
-                <ActorName>{actor.name}</ActorName>
-                <CharacterName>as {actor.character}</CharacterName>
-            </ActorInfo>
-        </Card>
-    );
+  return (
+    <Card>
+      <ActorImage src={actor.profilePath} alt={actor.name} />
+      <ActorInfo>
+        <ActorName>{actor.name}</ActorName>
+        {
+          actor.character && <CharacterName>as {actor.character}</CharacterName>
+        }
+
+      </ActorInfo>
+    </Card>
+  );
 }
 
 export default ActorCard;

@@ -11,10 +11,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToWatchlist, removeFromWatchlist, selectIsInWatchlist } from '../redux/slices/watchListSlice';
 
 const DetailContainer = styled.div`
-  padding: 20px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: ${(props) => props.theme.screenSizes.tablet}) {
+   text-align: center;
+}
+
 `;
 
 const MovieDetailsContainer = styled.div`
@@ -23,7 +27,12 @@ const MovieDetailsContainer = styled.div`
   padding: 2rem;
   display: flex;
   flex-direction: row;
-  height:500px
+  @media (max-width: ${(props) => props.theme.screenSizes.tablet}) {
+    flex-direction: column; // Change to row layout on tablet screens
+    align-items: center;
+    text-align: center;
+}
+
 `;
 
 const MovieBackdropContainer = styled.div`
@@ -60,6 +69,7 @@ const MovieTitle = styled.h2`
 const MovieDescription = styled.p`
   font-size: 1rem;
   margin-top: 2rem;
+  
 `;
 
 const CastContainer = styled.div`
@@ -134,6 +144,10 @@ const MovieDetails = styled.div`
     color: ${(props) => props.theme.colors.text};
     margin-bottom: 1rem;
     align-items: center;
+    @media (max-width: ${(props) => props.theme.screenSizes.tablet}) {
+        justify-content: center;
+    }
+
     `;
 
 
@@ -152,13 +166,16 @@ const WatchlistButton = styled.button`
   `;
 
 const UserScoreWrapper = styled.div`
-display: flex;
-align-items: center;
+    display: flex;
+    align-items: center;
     margin-bottom: 1.5rem;
     font-size: 1rem;
     font-weight: bold;
+      @media (max-width: ${(props) => props.theme.screenSizes.tablet}) {
+        justify-content: center;
+    }
   
-    `
+`
 
 function MovieDetailPage() {
     const dispatch = useDispatch();
@@ -169,11 +186,9 @@ function MovieDetailPage() {
 
     const isInWatchlist = useSelector((state) => selectIsInWatchlist(state, movieId));
 
-    console.log(isInWatchlist)
 
     const handleToggleWatchlist = async () => {
         if (isInWatchlist) {
-            console.log("Removing movie with ID:", movieId);
             dispatch(removeFromWatchlist({ id: movieId }));
         } else {
             // Fetch the movie data and add it to the watchlist
@@ -248,20 +263,21 @@ function MovieDetailPage() {
             <MovieDetailsContainerBottom>
                 <CastHeader>Top Billed Cast</CastHeader>
                 <CastContainer>
-                    <TopBilledCastList>
+                    {cast.length > 0 ?
+                        <TopBilledCastList>
 
-                        {cast.slice(0, 10).map((actor) => (
-                            <Link
-                                to={`/actor/${actor.id}`}
-                                key={actor.id}
-                                style={{ textDecoration: 'none', color: 'inherit' }}
-                            >
-                                <ActorCard actor={actor} />
-                            </Link>
-                        ))}
-                    </TopBilledCastList>
+                            {cast.slice(0, 10).map((actor) => (
+                                <Link
+                                    to={`/actor/${actor.id}`}
+                                    key={actor.id}
+                                    style={{ textDecoration: 'none', color: 'inherit' }}
+                                >
+                                    <ActorCard actor={actor} />
+                                </Link>
+                            ))}
+                        </TopBilledCastList> : String("No cast available")
+                    }
                 </CastContainer>
-
                 <StyledLink state={{ cast, crew }} to={`/movie/${movie.id}/cast-crew`}>View Full Cast and Crew  <ArrowForwardIcon /> </StyledLink>
             </MovieDetailsContainerBottom>
         </DetailContainer >

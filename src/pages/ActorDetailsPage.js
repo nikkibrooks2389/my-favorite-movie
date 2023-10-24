@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchActorDetails, fetchKnownMovies } from '../services/movieApi';
-import ActorCard from '../components/common/ActorCard';
+
 
 const ActorPageWrapper = styled.div`
-    margin-top: 20px;
     display: flex;
     flex-direction: column;
- 
-    padding: 3rem;
+    
+    @media (max-width: ${(props) => props.theme.screenSizes.tablet}) {
+        text-align: center;
+    }
+
 `;
 
 const ActorImage = styled.img`
-    min-width: 300px;
+
     width: 300px;
-    height: 450px;
+    height: 400px;
     border-radius: 10px;
     margin-bottom: 1rem;
 `;
@@ -23,6 +25,11 @@ const ActorImage = styled.img`
 const ActorTopSection = styled.div`
     display: flex;
     flex-direction: row;
+    
+    @media (max-width: ${(props) => props.theme.screenSizes.tablet}) {
+        flex-direction: column; // Change to row layout on tablet screens
+        align-items: center;
+    }
 `;
 
 const ActorInformation = styled.div`
@@ -35,6 +42,7 @@ const ActorInformation = styled.div`
 const ActorName = styled.h1`
     font-size: 2.2rem;
     margin: unset;
+ 
 `;
 
 const ActorBio = styled.p`
@@ -116,11 +124,20 @@ const KnownForHeader = styled.h2`
     margin:unset
 `;
 
+const ReadMoreButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+`;
+
+
 function ActorDetailPage() {
     const { actorId } = useParams();
     const [actor, setActor] = useState(null);
     const [knownMovies, setKnownMovies] = useState([]);
     const [showAllMovies, setShowAllMovies] = useState(false);
+    const [showFullBio, setShowFullBio] = useState(false);
 
     useEffect(() => {
         const fetchActorAndKnownMovies = async () => {
@@ -140,47 +157,57 @@ function ActorDetailPage() {
     }, [actorId]);
 
     if (!actor) return <p>Loading...</p>;
-
+    console.log(actor)
     return (
         <ActorPageWrapper>
             <ActorTopSection>
                 <ActorImage src={actor.profilePath} alt={actor.name} />
                 <ActorInformation>
                     <ActorName>{actor.name}</ActorName>
-                    <ActorBio>
-                        <h3>Biography</h3>
-                        {actor.bio}
-                    </ActorBio>
+                    {actor.bio ? (
+                        <ActorBio>
+                            <h3>Biography</h3>
+                            {showFullBio ? actor.bio : actor.bio.slice(0, 500)}
+                            {actor.bio.length > 500 && (
+                                <ReadMoreButton onClick={() => setShowFullBio(!showFullBio)}>
+                                    {showFullBio ? 'Read Less' : '...Read More'}
+                                </ReadMoreButton>
+                            )}
+                        </ActorBio>
+                    ) : (
+                        <p>No biography available.</p>
+                    )}
                 </ActorInformation>
             </ActorTopSection>
 
+            {knownMovies.length > 0 &&
+                <KnownForSection>
 
-            <KnownForSection>
-
-                <KnownForHeader>Known For</KnownForHeader>
+                    <KnownForHeader>Known For</KnownForHeader>
 
 
-                <KnownForList>
-                    {showAllMovies
-                        ? knownMovies.map((movie) => (
-                            <KnownForItem key={movie.id}>
-                                <KnownForMovieLink to={`/movie/${movie.id}`}>
-                                    <MoviePoster src={movie.posterPath} alt={movie.title} />
-                                    <span className="movie-title">{movie.title}</span>
-                                </KnownForMovieLink>
-                            </KnownForItem>
-                        ))
-                        : knownMovies.slice(0, 15).map((movie) => (
-                            <KnownForItem key={movie.id}>
-                                <KnownForMovieLink to={`/movie/${movie.id}`}>
-                                    <MoviePoster src={movie.posterPath} alt={movie.title} />
-                                    <span className="movie-title">{movie.title}</span>
-                                </KnownForMovieLink>
-                            </KnownForItem>
-                        ))}
-                </KnownForList>
+                    <KnownForList>
+                        {showAllMovies
+                            ? knownMovies.map((movie) => (
+                                <KnownForItem key={movie.id}>
+                                    <KnownForMovieLink to={`/movie/${movie.id}`}>
+                                        <MoviePoster src={movie.posterPath} alt={movie.title} />
+                                        <span className="movie-title">{movie.title}</span>
+                                    </KnownForMovieLink>
+                                </KnownForItem>
+                            ))
+                            : knownMovies.slice(0, 15).map((movie) => (
+                                <KnownForItem key={movie.id}>
+                                    <KnownForMovieLink to={`/movie/${movie.id}`}>
+                                        <MoviePoster src={movie.posterPath} alt={movie.title} />
+                                        <span className="movie-title">{movie.title}</span>
+                                    </KnownForMovieLink>
+                                </KnownForItem>
+                            ))}
+                    </KnownForList>
 
-            </KnownForSection>
+                </KnownForSection>
+            }
         </ActorPageWrapper>
     );
 }

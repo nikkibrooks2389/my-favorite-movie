@@ -5,9 +5,12 @@ import { fetchMovies } from '../services/movieApi';
 import styled from 'styled-components';
 import SearchBar from '../components/common/SearchBar';
 import NoResultsComponent from '../components/common/NoResults';
+
+
 const SearchResultsPageWrapper = styled.div`
-  padding: 20px;
+
   text-align: center;
+
 `;
 
 
@@ -17,7 +20,7 @@ const SearchResultsPage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [noResultsFound, setNoResultsFound] = useState(false);
-    const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchAllMovies = async () => {
@@ -48,7 +51,7 @@ const SearchResultsPage = () => {
     return (
         <SearchResultsPageWrapper>
             <SearchBar defaultQuery={query} />
-            <h2>Search Results for: {query}</h2>
+
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (

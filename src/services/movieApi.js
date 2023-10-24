@@ -43,7 +43,7 @@ export async function fetchMovies(query, genre, sortBy) {
             id: movie.id,
             title: movie.title,
             description: movie.overview,
-            releaseDate: formatDate(movie.release_date),
+            releaseDate: movie.release_date ? formatDate(movie.release_date) : 'N/A',
             posterPath: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : movieplaceholder,
         }));
 
@@ -74,7 +74,7 @@ export async function fetchMovieDetails(movieId) {
             tagline: movie.tagline,
             userScore: movie.vote_average * 10,
             runtime: convertMinutesToHoursAndMinutes(movie.runtime),
-            posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            posterPath: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : movieplaceholder,
             backdropPath: movie.backdrop_path ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` : '',
         };
     } catch (error) {
@@ -125,7 +125,7 @@ export async function fetchActorDetails(actorId) {
             id: actor.id,
             name: actor.name,
             bio: actor.biography,
-            profilePath: `https://image.tmdb.org/t/p/w500${actor.profile_path}`,
+            profilePath: actor.profile_path ? `https://image.tmdb.org/t/p/w500${actor.profile_path}` : personPlaceholder,
         };
     } catch (error) {
         console.error("Error fetching actor details:", error.message);
@@ -173,6 +173,62 @@ export async function fetchKnownMovies(actorName) {
         return [];
     } catch (error) {
         console.error('Error fetching known movies:', error.message);
+        throw error;
+    }
+}
+
+// export async function fetchMoviesInTheaters() {
+//     try {
+//         const response = await fetch(
+//             `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`
+//         );
+//         console.log(response.data)
+//         if (!response.data.results) {
+//             throw new Error('Failed to fetch movies in theaters');
+//         }
+
+//         const moviesInTheaters = response.data.results.map((movie) => ({
+//             id: movie.id,
+//             title: movie.title,
+//             description: movie.overview,
+//             releaseDate: formatDate(movie.release_date),
+//             posterPath: movie.poster_path
+//                 ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+//                 : movieplaceholder,
+//         }));
+
+//         return moviesInTheaters;
+//     } catch (error) {
+//         console.error('Error fetching movies in theaters:', error.message);
+//         throw error;
+//     }
+// }
+
+export async function fetchTrendingMovies() {
+    try {
+        const response = await fetch(
+            `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`
+        );
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch trending movies');
+        }
+
+        const data = await response.json();
+
+        const trendingMovies = data.results.map((movie) => ({
+            id: movie.id,
+            title: movie.title,
+            description: movie.overview,
+            releaseDate: formatDate(movie.release_date),
+            posterPath: movie.poster_path
+                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                : movieplaceholder,
+        }));
+
+        return trendingMovies;
+    } catch (error) {
+        console.error('Error fetching trending movies:', error.message);
         throw error;
     }
 }

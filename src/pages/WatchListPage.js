@@ -4,43 +4,53 @@ import { useSelector } from 'react-redux';
 import MovieCard from '../components/common/MovieCard';
 
 const WatchlistContainer = styled.div`
-  max-width: 800px;
+  width: 100%;
   margin: 2rem auto;
-  padding: 1rem;
-
   border-radius: 8px;
 `;
 
-const Title = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+const Title = styled.h1`
+  text-align: center;
+  margin-bottom: 3rem;
 `;
 
 const MovieList = styled.ul`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
   list-style-type: none;
   padding: 0;
 `;
 
 const MovieItem = styled.li`
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e5e5e5;
 
   &:last-child {
     border-bottom: none;
   }
 `;
 
+const NoMoviesMessage = styled.p`
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+`;
+
 const WatchListPage = () => {
-  // Retrieve the watchlist items from the Redux store
+
   const watchlist = useSelector((state) => state.watchlist);
 
   return (
     <WatchlistContainer>
-      <Title>Your Watchlist</Title>
+      <Title> Watchlist</Title>
+      {watchlist.length === 0 && <NoMoviesMessage>There are no movies in your watchlist</NoMoviesMessage>}
+
       <MovieList>
         {watchlist.map((movie, index) => (
           <MovieItem key={index}>
-            {/* Render each movie using the MovieCard component */}
+
             <MovieCard movie={movie} />
           </MovieItem>
         ))}

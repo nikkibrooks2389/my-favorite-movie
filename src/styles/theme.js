@@ -1,5 +1,5 @@
 
-export const darkTheme = {
+export const theme = {
     colors: {
         background: '#000000',         // Dark background color
         text: '#ffffff',              // White text color
@@ -13,4 +13,11 @@ export const darkTheme = {
     fonts: {
         main: 'Arial, sans-serif',    // Main font
     },
+    screenSizes: {
+        mobile: '425px',
+        tablet: '768px',
+        laptop: '1024px',
+        desktop: '2560px',
+    },
 };
+
