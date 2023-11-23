@@ -4,31 +4,43 @@ import SearchBar from '../components/common/SearchBar';
 import styled from 'styled-components';
 import { fetchTrendingMovies } from '../services/movieApi';
 import MovieCard from '../components/common/MovieCard';
+import movieBackground1 from '../assets/movieBackground2.jpg';
 
 const HomeWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-
-  font-family: 'Arial', sans-serif;
   padding-bottom:100px;
 `;
 
-const Title = styled.h2`
+const Title = styled.h1`
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 4rem;
   margin-bottom: 2.5rem;
+  font-family: 'Bebas Neue', sans-serif;
+  @media (max-width: ${(props) => props.theme.screenSizes.mobile}) {
+   font-size: 3.2rem;
+  }
+  
 `;
 
 const SectionTitle = styled.h2`
-    font-size: 2rem;
-    margin: 3rem 0;
+    font-size: 2.5rem;
+    margin: 2rem 0;
+    font-family: 'Bebas Neue', sans-serif;
     @media (max-width: ${(props) => props.theme.screenSizes.tablet}) {
     text-align: center;
   }
 `;
 
 
+const SectionWrapper = styled.div`
+  margin: 3rem;
+  @media (max-width: ${(props) => props.theme.screenSizes.tablet}) {
+    text-align: center;
+  }
+
+`;
 
 const SectionContainer = styled.div`
   display: flex;
@@ -61,6 +73,31 @@ const List = styled.div`
     gap: 1rem;
   
 `;
+
+const MovieHeaderBackground = styled.img.attrs({
+  src: movieBackground1
+})`
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+  object-fit: cover; // Ensures the image covers the entire area without distortion
+`;
+
+const MovieHeaderWrapper = styled.div`
+    position: relative;
+    height: 400px;
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border:none;
+    @media (max-width: ${(props) => props.theme.screenSizes.tablet}) {
+    height: 300px;
+  }
+`;
+
 const HomePage = () => {
 
   const [trendingMovies, setTrendingMovies] = useState([]);
@@ -76,23 +113,30 @@ const HomePage = () => {
   }, []);
 
   const customCardStyle = {
-    height: '350px', // Adjust the height as needed
+    height: '350px',
   };
 
   return (
     <HomeWrapper>
-      <Title>Welcome to My Favorite Movies</Title>
-      <SearchBar />
+      <MovieHeaderWrapper>
+        <MovieHeaderBackground />
 
-      <SectionTitle>Trending Now</SectionTitle>
-      <SectionContainer>
-        <List>
-          {trendingMovies.map((movie) => (
-            <MovieCard customStyle={customCardStyle} key={movie.id} movie={movie} />
-          ))}
-        </List>
+        <Title>My Favorite Movies</Title>
+        <SearchBar />
 
-      </SectionContainer>
+      </MovieHeaderWrapper>
+      <SectionWrapper>
+
+        <SectionTitle>Trending Now</SectionTitle>
+        <SectionContainer>
+          <List>
+            {trendingMovies.map((movie) => (
+              <MovieCard customStyle={customCardStyle} key={movie.id} movie={movie} />
+            ))}
+          </List>
+
+        </SectionContainer>
+      </SectionWrapper>
     </HomeWrapper>
   );
 }

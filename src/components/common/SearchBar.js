@@ -18,31 +18,34 @@ export const SearchForm = styled.form`
 `;
 
 export const StyledInput = styled.input`
-  border-radius: 4px 0 0 4px;
+  border-radius: 25px 0 0 25px;
   background-color: ${(props) => props.theme.colors.background};
   color: ${(props) => props.theme.colors.text};
   border: 2px solid ${(props) => props.theme.colors.secondary};
   padding: 10px;
   width: 200px;
   transition: border-color 0.3s ease-in-out;
-  font-size: 16px;
+  font-size: 1rem;
   &:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   &:focus {
     outline: none;
-    background-color: ${(props) => props.theme.colors.background};
-    color: ${(props) => props.theme.colors.text};
-    border-color: ${(props) => props.theme.colors.secondaryLight};
-    box-shadow: 0 0 8px ${(props) => props.theme.colors.primary};
+  }
+
+    @media (max-width: ${(props) => props.theme.screenSizes.mobile}) {
+      padding: 8px;
+      width: 200px;
   }
 `;
 
 const StyledButton = styled(Button)`
   && {
-    border-radius: 4px;
-    background-color: ${(props) => props.theme.colors.secondaryLight};
+    border-radius: 0px 25px 25px 0px;
+    background-color: black;
+    border: 2px solid ${(props) => props.theme.colors.secondaryLight};
+    border-left: none;
     margin-left: -1px;
     height: 56px;
     width: 56px;
@@ -52,12 +55,15 @@ const StyledButton = styled(Button)`
     transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
 
     &:hover {
-      background-color: #5865f2; /* Change to your desired hover color */
-      transform: scale(1.05); /* Add a scaling effect on hover */
+      background-color: black /* Change to your desired hover color */
+
     }
 
     .MuiSvgIcon-root { /* Style the search icon */
       color: #fff; /* Make the icon white */
+      &:hover {
+         transform: scale(1.5); /* Add a scaling effect on hover */
+      }
     }
   }
 `;

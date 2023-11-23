@@ -7,7 +7,7 @@ const NavbarContainer = styled.nav`
   height: 80px;
   display: flex;
   transition: backdrop-filter 0.3s ease; /* Add a smooth transition effect for the blur */
-
+  font-family: 'Bebas Neue', sans-serif;
   backdrop-filter: ${({ isScrolled }) =>
         isScrolled ? 'blur(15px)' : 'none'};
   padding: 2rem;

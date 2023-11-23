@@ -82,12 +82,14 @@ const ActionButton = styled.button`
 
 const ActionMenu = styled.div`
   position: absolute;
-  top: 40px;
-  right: 0;
+  top: 55px;
+  right: 10px;
   background-color: #fff;
+  color: black;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 0.9rem;
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
 `;
 
@@ -96,10 +98,9 @@ const ActionMenuItem = styled.div`
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
-  background-color: ${(props) => props.theme.colors.secondary};
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.secondaryLight};
+    background-color: lightgray;
   }
 `;
 

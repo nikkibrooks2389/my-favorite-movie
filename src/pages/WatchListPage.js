@@ -12,6 +12,8 @@ const WatchlistContainer = styled.div`
 const Title = styled.h1`
   text-align: center;
   margin-bottom: 3rem;
+  font-size: 4rem;
+  font-family: 'Bebas Neue', sans-serif;
 `;
 
 const MovieList = styled.ul`
